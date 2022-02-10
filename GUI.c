@@ -1,12 +1,18 @@
 #include <stdio.h>
-#include "Physics.h"
-#include "util.h"
+#include "Libraries/include/SDL.h"
+#define SCREEN_WIDTH   1280
+#define SCREEN_HEIGHT  720
+
+
+typedef struct {
+	SDL_Renderer *renderer;
+	SDL_Window *window;
+} App;
+
+
 
 int main(void){
     printf("coucou le monde\n");
-    printf("%d \n",ceciEstUnTest());
-    int test = renvoyer2();
-    printf("%d \n", test);
 
     /*
     Penser a utiliser scanf comme ca:
@@ -14,4 +20,39 @@ int main(void){
     */
 
     return 0;
+}
+
+void initSDL(void)
+{
+	int rendererFlags, windowFlags;
+
+	rendererFlags = SDL_RENDERER_ACCELERATED;
+
+	windowFlags = 0;
+
+    App app;
+
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	{
+		printf("Couldn't initialize SDL: %s\n", SDL_GetError());
+		exit(1);
+	}
+
+	app.window = SDL_CreateWindow("Shooter 01", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, windowFlags);
+
+	if (!app.window)
+	{
+		printf("Failed to open %d x %d window: %s\n", SCREEN_WIDTH, SCREEN_HEIGHT, SDL_GetError());
+		exit(1);
+	}
+
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+
+	app.renderer = SDL_CreateRenderer(app.window, -1, rendererFlags);
+
+	if (!app.renderer)
+	{
+		printf("Failed to create renderer: %s\n", SDL_GetError());
+		exit(1);
+	}
 }
