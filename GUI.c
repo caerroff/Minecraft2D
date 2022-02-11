@@ -9,12 +9,19 @@ typedef struct {
 	SDL_Window *window;
 } App;
 
-
+App initSDL(void);
+void drawBlack(App app);
 
 int main(void){
     printf("coucou le monde\n");
-
-    /*
+	App app = initSDL();
+	drawBlack(app);
+	char answer;
+	scanf("%c", &answer);
+	if(answer == 'e'){
+		printf("GoodBye");
+	}
+	/*
     Penser a utiliser scanf comme ca:
     scanf("%d", &reference) <---- reference vers la variable
     */
@@ -22,7 +29,16 @@ int main(void){
     return 0;
 }
 
-void initSDL(void)
+void drawBlack(App app){
+	SDL_SetRenderDrawColor(app.renderer, 135, 206, 235, 255);
+
+	SDL_RenderClear(app.renderer);
+
+	SDL_RenderPresent(app.renderer);
+}
+
+
+App initSDL(void)
 {
 	int rendererFlags, windowFlags;
 
@@ -30,7 +46,7 @@ void initSDL(void)
 
 	windowFlags = 0;
 
-    App app;
+	App app;
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -38,7 +54,7 @@ void initSDL(void)
 		exit(1);
 	}
 
-	app.window = SDL_CreateWindow("Shooter 01", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, windowFlags);
+	app.window = SDL_CreateWindow("MC2D", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, windowFlags);
 
 	if (!app.window)
 	{
@@ -55,4 +71,5 @@ void initSDL(void)
 		printf("Failed to create renderer: %s\n", SDL_GetError());
 		exit(1);
 	}
+	return app;
 }
