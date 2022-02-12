@@ -2,6 +2,7 @@
     "C_Cpp.dimInactiveRegions": false,
     "files.associations": {
         "stdio.h": "c",
-        "sdl.h": "c"
+        "sdl.h": "c",
+        "util.h": "c"
     }
 }

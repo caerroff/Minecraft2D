@@ -1,14 +1,14 @@
 /*
 *   
 *This is how the versioning works:
-*{isReleased = 0}.{isPlayable = 0}.{ver = 1}
-*	MC2D Build 0.0.1
+*{isReleased = 0}.{isPlayable = 0}.{ver = 2}
+*	MC2D Build 0.0.2
 */
 
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "Libraries/include/SDL.h"
+#include "../lib/include/SDL.h"
 #include "GUI.h"
 #include "util.h"
 #include "Physics.h"
@@ -19,7 +19,8 @@
 
 int main(void){
     printf("Version %s\n", VERSION);
-
-    createWindow();
+    int x = 500;
+    int y = 400;
+    createWindow(&x, &y);
     return 0;
 }

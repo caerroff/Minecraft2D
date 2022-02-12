@@ -1,7 +1,8 @@
 #ifndef UTIL
 #define UTIL
 
-int renvoyer2(void);
+
+int rd(int max);
 
 
 #endif
