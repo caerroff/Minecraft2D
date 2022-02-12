@@ -1,34 +1,15 @@
-/*
-*   
-*This is how the versioning works:
-*{isReleased = 0}.{isPlayable = 0}.{ver = 1}
-*	MC2D Build 0.0.1
-*/
-
 #include <stdio.h>
-#include "Libraries/include/SDL.h"
-#define SCREEN_WIDTH   1280
-#define SCREEN_HEIGHT  720
-
-typedef struct {
-	SDL_Renderer *renderer;
-	SDL_Window *window;
-	SDL_Event *event;
-} App;
-
-App initSDL(void);
-void drawBlack(App app);
-void cleanUp(App app);
-
-void pollEvents(App app, int *running);
+#include "GUI.h"
+#include <stdlib.h>
 
 
-int main(void){
+
+
+int createWindow(void){
 	int running;
 	int *point;
 	running = 1;
 	point = &running;
-    printf("MC2D v0.0.1\n");
 	App app = initSDL();
 	
 	char answer;
@@ -52,6 +33,9 @@ void drawBlack(App app){
 	SDL_RenderPresent(app.renderer);
 }
 
+void drawColour(SDL_Renderer *renderer, int r, int g, int b){
+	SDL_SetRenderDrawColor(renderer,r,g,b,255 );
+}
 
 void cleanUp(App app)
 {
@@ -69,14 +53,33 @@ void pollEvents(App app, int * running)
 				case SDL_QUIT:
 					cleanUp(app);
 					*running = 0;
-					printf("ByeBye\n");
 					break;	
 
-				case 4196274163:
-					printf("oh oh\n");
+				case SDL_WINDOWEVENT_FOCUS_LOST:
+					printf("yep\n");
+					SDL_MinimizeWindow(app.window);
+					break;
 
+			
+				case SDL_KEYUP:
+					break;
+				case SDL_KEYDOWN:
+					printf("%s\n", SDL_GetKeyName(e.key.keysym.sym));
+					break;
+				
+				case 771:
+					break;
+
+				case SDL_WINDOW_MOUSE_FOCUS:
+					printf("%x\n",SDL_GetMouseState);
+					break;
+
+				default:
+					printf("%d \n", e.type);
+					break;
 
 		}
+		
 	}
 }
 
