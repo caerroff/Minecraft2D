@@ -1,25 +1,40 @@
+/*
+*   
+*This is how the versioning works:
+*{isReleased = 0}.{isPlayable = 0}.{ver = 1}
+*	MC2D Build 0.0.1
+*/
+
 #include <stdio.h>
 #include "Libraries/include/SDL.h"
 #define SCREEN_WIDTH   1280
 #define SCREEN_HEIGHT  720
 
-
 typedef struct {
 	SDL_Renderer *renderer;
 	SDL_Window *window;
+	SDL_Event *event;
 } App;
 
 App initSDL(void);
 void drawBlack(App app);
+void cleanUp(App app);
+
+void pollEvents(App app, int *running);
+
 
 int main(void){
-    printf("coucou le monde\n");
+	int running;
+	int *point;
+	running = 1;
+	point = &running;
+    printf("MC2D v0.0.1\n");
 	App app = initSDL();
-	drawBlack(app);
+	
 	char answer;
-	scanf("%c", &answer);
-	if(answer == 'e'){
-		printf("GoodBye");
+	while(running){
+		drawBlack(app);
+		pollEvents(app, point);
 	}
 	/*
     Penser a utiliser scanf comme ca:
@@ -30,11 +45,39 @@ int main(void){
 }
 
 void drawBlack(App app){
-	SDL_SetRenderDrawColor(app.renderer, 135, 206, 235, 255);
+	SDL_SetRenderDrawColor(app.renderer, 255, 255, 255, 255);
 
 	SDL_RenderClear(app.renderer);
 
 	SDL_RenderPresent(app.renderer);
+}
+
+
+void cleanUp(App app)
+{
+    SDL_DestroyRenderer(app.renderer);
+    SDL_DestroyWindow(app.window);
+    SDL_Quit();
+}
+
+
+void pollEvents(App app, int * running)
+{
+	SDL_Event e;
+	while(SDL_PollEvent(&e) != 0){
+   		switch(e.type){
+				case SDL_QUIT:
+					cleanUp(app);
+					*running = 0;
+					printf("ByeBye\n");
+					break;	
+
+				case 4196274163:
+					printf("oh oh\n");
+
+
+		}
+	}
 }
 
 
@@ -71,5 +114,7 @@ App initSDL(void)
 		printf("Failed to create renderer: %s\n", SDL_GetError());
 		exit(1);
 	}
+
+
 	return app;
 }
