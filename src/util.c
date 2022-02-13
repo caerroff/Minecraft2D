@@ -9,3 +9,4 @@ int rd(int max){
     srand(time(NULL));
     return (rand() % (max + 1));
 }
+

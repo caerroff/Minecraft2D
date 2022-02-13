@@ -30,7 +30,7 @@ void drawRectangle(App app, int x, int y);
 //cleans up when closed
 void cleanUp(App app);
 
-char pollEvents(App app, int *running);
+int pollEvents(App app, int *running);
 
 App createWindow(int *x, int *y);
 

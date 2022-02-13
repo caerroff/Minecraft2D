@@ -81,7 +81,7 @@ void cleanUp(App app)
 }
 
 
-char pollEvents(App app, int * running)
+int pollEvents(App app, int * running)
 {
 	SDL_Event e;
 	while(SDL_PollEvent(&e) != 0){
@@ -93,15 +93,32 @@ char pollEvents(App app, int * running)
 
 			
 				case SDL_KEYUP:
+					return 0;
 					break;
 				case SDL_KEYDOWN:
 					switch(e.key.keysym.sym){
-						case 122:
-							return 'Z';
+						case 27:
+							return -1;
 							break;
+						case 32:
+							return 1;
+							break;
+						case 1073741903: //Right
+							return 2;
+							break;
+						case 1073741904: //Left
+							return 3;
+							break;
+						case 1073741905: //Down
+							return 4;
+							break;
+						case 1073741906: //Up
+							return 5;
+							break;
+
 						default:
 							printf("%s\n", SDL_GetKeyName(e.key.keysym.sym));
-							printf("%x\n", e.key.keysym.sym);
+							printf("%d\n", e.key.keysym.sym);
 							break;
 					}
 					break;

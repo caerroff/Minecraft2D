@@ -17,5 +17,4 @@ void gravity(int *y){
 
 void jump(int *y){
         *y = *y -1;
-
 }
