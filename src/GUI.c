@@ -5,7 +5,7 @@
 #include "Physics.h"
 
 
-App createWindow(int *x, int *y){
+App createWindow(void){
 	int running;
 	int *point;
 	running = 1;
@@ -55,12 +55,12 @@ void drawColour(App app, int r, int g, int b){
 	SDL_RenderPresent(app.renderer);
 }
 
-void drawRectangle(App app, int x, int y){
+void drawRectangle(App app, int *x, int *y){
 	SDL_RenderClear(app.renderer);
 
     SDL_Rect rect;
-    rect.x = x;
-    rect.y = y;
+    rect.x = *x;
+    rect.y = *y;
     rect.w = 200;
     rect.h = 200;
 

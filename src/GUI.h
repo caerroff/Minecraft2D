@@ -25,14 +25,14 @@ void drawColour(App app, int r, int g, int b);
 int drawCharacter(App app);
 
 //Draws a rectangle
-void drawRectangle(App app, int x, int y);
+void drawRectangle(App app, int *x, int *y);
 
 //cleans up when closed
 void cleanUp(App app);
 
 int pollEvents(App app, int *running);
 
-App createWindow(int *x, int *y);
+App createWindow(void);
 
 
 #endif

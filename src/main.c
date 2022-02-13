@@ -17,15 +17,26 @@
 //Version number
 #define VERSION "0.0.3"
 
+typedef struct{
+    int x;
+    int y;
+    int xVel;
+    int yVel;
+}Perso;
+
 int main(void){
     printf("Version %s\n", VERSION);
+    Perso square;
+    square.x = 500;
+    square.y = 500;
+
     int x = 500;
     int y = 400;
     int running = 1;
     int *point = &running;
-    App app = createWindow(&x, &y);
+    App app = createWindow();
     while(running){
-		gravity(&y);
+		gravity(square.y);
 		SDL_Delay(1);
 		switch(pollEvents(app, point)){
 			case -1:
@@ -35,28 +46,28 @@ int main(void){
             case 1:
 				while(y>220){
 					int *pointY = &y;
-                    jump(pointY);
-					drawRectangle(app, x, y);
+                    jump(&square.y);
+					drawRectangle(app, &square.x, &square.y);
 					SDL_Delay(0.5);
 
 				}
 				break;
             case 2:
                  ;
-                int copyX = x;
-                while(x != copyX+10){
+                int copyX = square.x;
+                while(square.x != copyX+10){
                     x = x+1;
-                    drawRectangle(app, x, y);
+                    drawRectangle(app, &square.x, &square.y);
                 }
                     
                 
                 break;
             
             case 3:
-                x = x-10;
+                square.x = square.x-10;
                 break;
 		}
-		drawRectangle(app, x, y);
+		drawRectangle(app, square.x, square.y);
 	}
     return 0;
 }
