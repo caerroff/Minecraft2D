@@ -3,6 +3,7 @@
     "files.associations": {
         "stdio.h": "c",
         "sdl.h": "c",
-        "util.h": "c"
+        "util.h": "c",
+        "physics.h": "c"
     }
 }

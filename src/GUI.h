@@ -32,7 +32,7 @@ void cleanUp(App app);
 
 char pollEvents(App app, int *running);
 
-int createWindow(int *x, int *y);
+App createWindow(int *x, int *y);
 
 
 #endif

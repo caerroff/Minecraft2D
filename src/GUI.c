@@ -5,7 +5,7 @@
 #include "Physics.h"
 
 
-int createWindow(int *x, int *y){
+App createWindow(int *x, int *y){
 	int running;
 	int *point;
 	running = 1;
@@ -13,27 +13,13 @@ int createWindow(int *x, int *y){
 	App app = initSDL();
 	
 	drawSky(app);
-	while(running){
-		gravity(y);
-		SDL_Delay(1);
-		switch(pollEvents(app, point)){
-			case 'Z':
-				while(*y>220){
-					jump(y);
-					drawRectangle(app, *x, *y);
-					SDL_Delay(0.5);
 
-				}
-				break;
-		}
-		drawRectangle(app, *x, *y);
-	}
 	/*
     Penser a utiliser scanf comme ca:
     scanf("%d", &reference) <---- reference vers la variable
     */
 
-    return 0;
+    return app;
 }
 
 void drawSky(App app){

@@ -9,7 +9,6 @@ int ceciEstUnTest(void){
 
 void gravity(int *y){
     if(*y<520){
-        printf("%d\n",*y);
         *y = *y+1;
     }
     
