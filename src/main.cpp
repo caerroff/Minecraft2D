@@ -1,13 +1,13 @@
 #include <iostream>
 #include "GUI.hpp"
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
-#define VERSION "0.0.4"
+#define VERSION "0.0.5"
 
 
 void loadTextures(sf::Texture *receiver);
 void gravity(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocity);
 bool isOnGround(sf::RenderWindow *window, sf::RectangleShape *player);
-void update(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocityX, float *playerVelocityY);
+void update(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocityX, float *playerVelocityY,sf::RectangleShape *dirt);
 
 int main(){
     printf("Version %s\n", VERSION);
@@ -26,10 +26,19 @@ int main(){
     //perso.setFillColor(sf::Color::Black);
     perso.setTexture(&perso_texture);
     perso.setSize(sf::Vector2f(140.f,140.f));
+    
+    sf::Texture dirt_texture;
+    dirt_texture.loadFromFile("sprite/block.png",sf::IntRect(0,0,64,64));
+    sf::RectangleShape dirt;
+    dirt.setTexture(&dirt_texture);
+    dirt.setSize(sf::Vector2f(75.f,75.f));
+    dirt.setPosition(300,420);
+
+
     window.clear(sf::Color(190,220,255,255));
     window.draw(perso);
+    window.draw(dirt);
     window.display();
-
     float playerVelocityX = 0.0;
     float playerVelocityY = 0.0;
 
@@ -55,7 +64,7 @@ int main(){
         }
 
 
-        update(&window,&perso,&playerVelocityX, &playerVelocityY);
+        update(&window,&perso,&playerVelocityX, &playerVelocityY, &dirt);
         gravity(&window, &perso, &playerVelocityY);
     }
 
@@ -95,9 +104,10 @@ bool isOnGround(sf::RenderWindow *window, sf::RectangleShape *player){
     }
 }
 
-void update(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocityX, float *playerVelocityY){
+void update(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocityX, float *playerVelocityY,sf::RectangleShape *dirt){
     player->move(*playerVelocityX,*playerVelocityY);
     window->clear(sf::Color(190,220,255,255));
     window->draw(*player);
+    window->draw(*dirt);
     window->display();
 }

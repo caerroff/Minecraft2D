@@ -1,7 +1,7 @@
 #include "GUI.hpp"
 #include <iostream>
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
-#define VERSION "0.0.4"
+#define VERSION "0.0.5"
 
 void mainMenu(sf::RenderWindow *window){
 
