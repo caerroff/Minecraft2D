@@ -2,7 +2,7 @@
 #define GUI
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
 
-
+void mainMenu(sf::RenderWindow *window);
 
 
 #endif

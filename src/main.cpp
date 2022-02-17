@@ -1,50 +1,31 @@
 #include <iostream>
 #include "GUI.hpp"
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
-#define VERSION "0.0.1"
+#define VERSION "0.0.2"
 
+
+void loadTextures(sf::Texture *receiver);
 
 int main(){
     printf("Version %s\n", VERSION);
+    sf::Keyboard keyboard;
     sf::RenderWindow window(sf::VideoMode(1280,720), "MC2D");
-    
-    window.setVerticalSyncEnabled(true);
-    window.setFramerateLimit(60);
-    sf::Color cyan(sf::Color::Cyan);
-    window.clear(cyan);
-    sf::RectangleShape title;
-    title.setSize(sf::Vector2f(700,100));
-    title.setPosition(sf::Vector2f(window.getSize().x/2-title.getSize().x/2,100));
-    title.setFillColor(sf::Color(200,150,200,255));
-    window.draw(title);
-
-    sf::RectangleShape play;
-    play.setSize(sf::Vector2f(500,80));
-    play.setPosition(sf::Vector2f(window.getSize().x/2-play.getSize().x/2,300));
-    play.setFillColor(sf::Color(255,255,255,255));
-    window.draw(play);
-
-    sf::RectangleShape options;
-    options.setSize(sf::Vector2f(500,80));
-    options.setPosition(sf::Vector2f(window.getSize().x/2-options.getSize().x/2,400));
-    options.setFillColor(sf::Color(255,255,255,255));
-    window.draw(options);
-
-    sf::RectangleShape version;
-    version.setSize(sf::Vector2f(150,30));
-    version.setPosition(sf::Vector2f(0,690));
-    version.setFillColor(sf::Color::Black);
-    window.draw(version);
-    
-    
+    mainMenu(&window);
+    window.clear(sf::Color(200,200,255,255));
+    window.display();
     sf::Mouse mouse;
     sf::Vector2i mousePos;
     sf::Mouse::Button lClick(sf::Mouse::Button::Left);
-
+    sf::Mouse::Button rClick(sf::Mouse::Button::Right);
+    sf::Texture perso_texture;
+    loadTextures(&perso_texture);
+    sf::RectangleShape perso;
+    //perso.setFillColor(sf::Color::Black);
+    perso.setTexture(&perso_texture);
+    perso.setSize(sf::Vector2f(120.f,120.f));
+    window.clear(sf::Color(190,220,255,255));
+    window.draw(perso);
     window.display();
-    //################
-    // RUNNING WINDOW
-    //################
     while(window.isOpen()){
         sf::Event event;
         while(window.pollEvent(event)){
@@ -53,22 +34,17 @@ int main(){
             }
         }
         
-        //printf("%d;%d\n",mousePos.x, mousePos.y);
         mousePos = mouse.getPosition(window);
-        printf("%d %d\n", sf::Vector2i(window.getSize().x/2-play.getSize().x/2,300).x, sf::Vector2i(window.getSize().x/2+play.getSize().x/2,300).x);
-        if(mousePos.x >= sf::Vector2i(window.getSize().x/2-play.getSize().x/2,300).x || mousePos.x <= sf::Vector2i(window.getSize().x/2+play.getSize().x/2,300).x){
-            //printf("1\n");
-            if(mousePos.y >= 300 || mousePos.y <= 380){
-                //printf("2\n");
-                if(mouse.isButtonPressed(lClick)){
-                    printf("3\n");
-                    window.close();
-                }
-            }  
+        if(keyboard.isKeyPressed(sf::Keyboard::Escape)){
+            window.close();
         }
-
+        
     }
 
     return 0;
 }
 
+
+void loadTextures(sf::Texture *receiver){
+    receiver->loadFromFile("sprite/perso.png",sf::IntRect(0,0,32,32));
+}
