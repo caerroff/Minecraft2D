@@ -1,7 +1,7 @@
 #include <iostream>
 #include "GUI.hpp"
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
-#define VERSION "0.0.3"
+#define VERSION "0.0.4"
 
 
 void loadTextures(sf::Texture *receiver);
@@ -47,12 +47,18 @@ int main(){
         if(keyboard.isKeyPressed(sf::Keyboard::Escape)){
             window.close();
         }
+        if(keyboard.isKeyPressed(sf::Keyboard::Space)){
+            if(isOnGround(&window, &perso)){
+                playerVelocityY = -15;
+            }
+            
+        }
 
 
 
-
-        gravity(&window, &perso, &playerVelocityY);
+        printf("%.1f\n",playerVelocityY);
         update(&window,&perso,&playerVelocityX, &playerVelocityY);
+        gravity(&window, &perso, &playerVelocityY);
     }
 
     return 0;
@@ -69,10 +75,14 @@ void gravity(sf::RenderWindow *window, sf::RectangleShape *player, float *player
     if(isOnGround(window,player) == false && *playerVelocity*1.25 < 25){
         if(*playerVelocity == 0){
             *playerVelocity = 1.0;
-        }else{
+        }else if(*playerVelocity >0){
             *playerVelocity = *playerVelocity * 1.25;
+        }else if(*playerVelocity < -1.5){
+            *playerVelocity = *playerVelocity * 0.865;
+        }else{
+            *playerVelocity = 0;
         }
-    }else if(isOnGround(window,player) == true){
+    }else if(isOnGround(window,player) == true && playerVelocity > 0){
         *playerVelocity = 0;
         player->setPosition(player->getPosition().x,window->getSize().y -player->getSize().y );
     }
