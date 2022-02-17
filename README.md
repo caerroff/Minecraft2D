@@ -1,6 +1,6 @@
 # <center> Minecraft2D</center>
 
-## <center>Minecraft, But in 2D, coded in C</center>
+## <center>Minecraft, But in 2D, coded in C++</center>
 
 ### <center>So not really minecraft anymore...</center>
 
@@ -12,18 +12,18 @@
 
  You can use it like so:
  
-   <center>`gcc *.c -o MC2D`</center>
+   <center>`g++ src/*.cpp -o MC2D`</center>
  
  and then run the program with
  
    <center>`./MC2D`</center>
-
+ *Actually it changed a little bit*
 if you don't have gcc or cc, you can use a regular IDE, and compile the code, linking every `.c` file.
 
 ##### *A Makefile has been created too, so if you can just type make in the game's directory and it'll do all the bad work*
 
 # File Structure
-  The file structure is pretty straight-forward, `GUI.c` is the **G**raphical **U**ser **I**nterface, `Physics.c` are the functions calculating gravity etc...
+  The file structure is pretty straight-forward, `GUI.cpp` is the **G**raphical **U**ser **I**nterface, main.cpp contains the core of the game etc...
   If you have any question on the code, or would like to give suggestions, we would be glad to hear them, write us
   
   **Faut trouver une adresse email haha...*
