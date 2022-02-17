@@ -55,8 +55,6 @@ int main(){
         }
 
 
-
-        printf("%.1f\n",playerVelocityY);
         update(&window,&perso,&playerVelocityX, &playerVelocityY);
         gravity(&window, &perso, &playerVelocityY);
     }
