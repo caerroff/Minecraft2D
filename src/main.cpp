@@ -1,10 +1,13 @@
 #include <iostream>
 #include "GUI.hpp"
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
-#define VERSION "0.0.2"
+#define VERSION "0.0.3"
 
 
 void loadTextures(sf::Texture *receiver);
+void gravity(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocity);
+bool isOnGround(sf::RenderWindow *window, sf::RectangleShape *player);
+void update(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocityX, float *playerVelocityY);
 
 int main(){
     printf("Version %s\n", VERSION);
@@ -22,10 +25,17 @@ int main(){
     sf::RectangleShape perso;
     //perso.setFillColor(sf::Color::Black);
     perso.setTexture(&perso_texture);
-    perso.setSize(sf::Vector2f(120.f,120.f));
+    perso.setSize(sf::Vector2f(140.f,140.f));
     window.clear(sf::Color(190,220,255,255));
     window.draw(perso);
     window.display();
+
+    float playerVelocityX = 0.0;
+    float playerVelocityY = 0.0;
+
+    /*
+        LAUNCHING WINDOW
+    */
     while(window.isOpen()){
         sf::Event event;
         while(window.pollEvent(event)){
@@ -34,11 +44,15 @@ int main(){
             }
         }
         
-        mousePos = mouse.getPosition(window);
         if(keyboard.isKeyPressed(sf::Keyboard::Escape)){
             window.close();
         }
-        
+
+
+
+
+        gravity(&window, &perso, &playerVelocityY);
+        update(&window,&perso,&playerVelocityX, &playerVelocityY);
     }
 
     return 0;
@@ -47,4 +61,35 @@ int main(){
 
 void loadTextures(sf::Texture *receiver){
     receiver->loadFromFile("sprite/perso.png",sf::IntRect(0,0,32,32));
+}
+
+
+
+void gravity(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocity){
+    if(isOnGround(window,player) == false && *playerVelocity*1.25 < 25){
+        if(*playerVelocity == 0){
+            *playerVelocity = 1.0;
+        }else{
+            *playerVelocity = *playerVelocity * 1.25;
+        }
+    }else if(isOnGround(window,player) == true){
+        *playerVelocity = 0;
+        player->setPosition(player->getPosition().x,window->getSize().y -player->getSize().y );
+    }
+}
+
+
+bool isOnGround(sf::RenderWindow *window, sf::RectangleShape *player){
+    if(player->getPosition().y+player->getSize().y < window->getSize().y){
+        return false;
+    }else{
+        return true;
+    }
+}
+
+void update(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocityX, float *playerVelocityY){
+    player->move(*playerVelocityX,*playerVelocityY);
+    window->clear(sf::Color(190,220,255,255));
+    window->draw(*player);
+    window->display();
 }
