@@ -4,6 +4,7 @@
         "stdio.h": "c",
         "sdl.h": "c",
         "util.h": "c",
-        "physics.h": "c"
+        "physics.h": "c",
+        "*.tcc": "cpp"
     }
 }
