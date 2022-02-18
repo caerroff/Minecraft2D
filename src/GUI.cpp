@@ -89,9 +89,9 @@ void mainMenu(sf::RenderWindow *window){
         //printf("%d;%d\n",mousePos.x, mousePos.y);
         mousePos = mouse.getPosition(*window);
         
-        if(mousePos.x >= sf::Vector2i(window->getSize().x/2-play.getSize().x/2,300).x && mousePos.x <= sf::Vector2i(window->getSize().x/2+play.getSize().x/2,300).x){
-            if(mousePos.y >= 300 && mousePos.y <= 380){
-                if(mouse.isButtonPressed(lClick)){
+        if(mouse.isButtonPressed(lClick)){
+            if(mousePos.x >= sf::Vector2i(window->getSize().x/2-play.getSize().x/2,300).x && mousePos.x <= sf::Vector2i(window->getSize().x/2+play.getSize().x/2,300).x){
+                if(mousePos.y >= 300 && mousePos.y <= 380){
                     menu = false;
                 }
             }  
