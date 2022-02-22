@@ -96,6 +96,5 @@ void mainMenu(sf::RenderWindow *window){
                 }
             }  
         }
-
     }
 }
