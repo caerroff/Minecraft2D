@@ -2,15 +2,63 @@
 #include <vector>
 #include "GUI.hpp"
 #include "world.hpp"
+#include "player.hpp"
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
 #define VERSION "0.0.6"
 
-
+/**
+ * @brief Loads the texture in path in the sf::Texture object
+ * 
+ * @param receiver the object you want to apply the texture to
+ * @param path the path to the texture
+ */
 void loadTextures(sf::Texture *receiver, std::string path);
-void gravity(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocity);
+
+/**
+ * @brief Applies gravity to the player
+ * 
+ * @param window the window the player is in
+ * @param player the player
+ * @param playerVelocity their velocity
+ */
+void gravity(sf::RenderWindow *window, Player *player);
+
+/**
+ * @brief tells if the player is on the ground
+ * 
+ * @param window the window the player is in
+ * @param player the player
+ * @return true if they're on the ground
+ * @return false otherwise
+ */
 bool isOnGround(sf::RenderWindow *window, sf::RectangleShape *player);
-void update(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocityX, float *playerVelocityY, Grid *gr);
+
+/**
+ * @brief new frame
+ * 
+ * @param window the window
+ * @param player the player
+ * @param playerVelocityX X velocity of the player
+ * @param playerVelocityY Y velocity of the player
+ * @param gr the grid of blocks (beta)
+ */
+void update(sf::RenderWindow *window, Player *player, Grid *gr);
+
+/**
+ * @brief initialises the player
+ * 
+ * @param perso the RectangleShape representing the player
+ * @param perso_texture the texture of the player
+ * @return sf::RectangleShape* the player finished :)
+ */
 sf::RectangleShape * initPlayer(sf::RectangleShape *perso, sf::Texture *perso_texture);
+
+/**
+ * @brief Initialises the dirt with its texture
+ * 
+ * @param dirt the RectangleShape representing the dirt
+ * @param dirt_texture the dirt texture
+ */
 void initDirt(sf::RectangleShape *dirt, sf::Texture *dirt_texture);
 
 
@@ -48,12 +96,10 @@ int main(){
     sf::Texture perso_texture;
     sf::RectangleShape perso;
     perso = *initPlayer(&perso, &perso_texture);
-
+    Player player(&perso_texture, &perso);
     window.clear(sf::Color(190,220,255,255));
-    window.draw(perso);
+    window.draw(*player.returnRect());
     window.display();
-    float playerVelocityX = 0.0;
-    float playerVelocityY = 0.0;
 
     /*
         LAUNCHING WINDOW
@@ -69,30 +115,30 @@ int main(){
             
             
             if(keyboard.isKeyPressed(sf::Keyboard::Right) && isOnGround(&window, &perso)){
-                    playerVelocityX = 10;
+                    player.setVelX(10);
             }
             if(keyboard.isKeyPressed(sf::Keyboard::Left) && isOnGround(&window, &perso)){
-                    playerVelocityX = -10;
+                    player.setVelX(-10);
             }
         }
 
         if(keyboard.isKeyPressed(sf::Keyboard::Space)){
-            if(isOnGround(&window, &perso)){
-                playerVelocityY = -15;
+            if(isOnGround(&window, player.returnRect())){
+                player.setVelY(-15);
             }   
         }
         if(keyboard.isKeyPressed(sf::Keyboard::Escape)){
                 window.close();
         }
         if(keyboard.isKeyPressed(sf::Keyboard::Right) == false && keyboard.isKeyPressed(sf::Keyboard::Left) == false && isOnGround(&window, &perso)){
-            playerVelocityX = 0;
+            player.setVelX(0);
         }
 
         
 
         //printf("%.1f;%.1f\n",perso.getPosition().x,perso.getPosition().y);
-        update(&window,&perso,&playerVelocityX, &playerVelocityY, &grid);
-        gravity(&window, &perso, &playerVelocityY);
+        update(&window, &player, &grid);
+        gravity(&window, &player);
         //movement(&window, &perso, &playerVelocityX);
     }
 
@@ -108,20 +154,20 @@ void movement(sf::RenderWindow *window, sf::RectangleShape *player, float *playe
     
 }
 
-void gravity(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocity){
-    if(isOnGround(window,player) == false && *playerVelocity*1.25 < 25){
-        if(*playerVelocity == 0){
-            *playerVelocity = 1.0;
-        }else if(*playerVelocity >0){
-            *playerVelocity = *playerVelocity * 1.25;
-        }else if(*playerVelocity < -1.5){
-            *playerVelocity = *playerVelocity * 0.865;
+void gravity(sf::RenderWindow *window, Player *player){
+    if(isOnGround(window,player->returnRect()) == false && player->getVelY()*1.25 < 25){
+        if(player->getVelY() == 0){
+            player->setVelY(1.0);
+        }else if(player->getVelY() >0){
+            player->setVelY(player->getVelY()*1.25);
+        }else if(player->getVelY() < -1.5){
+            player->setVelY(player->getVelY()*0.865);
         }else{
-            *playerVelocity = 0;
+            player->setVelY(0);
         }
-    }else if(isOnGround(window,player) == true && playerVelocity > 0){
-        *playerVelocity = 0;
-        player->setPosition(player->getPosition().x,window->getSize().y -player->getSize().y );
+    }else if(isOnGround(window,player->returnRect()) == true && player->getVelY() > 0){
+        player->setVelY(0);
+        player->returnRect()->setPosition(player->returnRect()->getPosition().x,window->getSize().y -player->returnRect()->getSize().y );
     }
 }
 
@@ -134,12 +180,13 @@ bool isOnGround(sf::RenderWindow *window, sf::RectangleShape *player){
     }
 }
 
-void update(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocityX, float *playerVelocityY, Grid *gr){
+void update(sf::RenderWindow *window, Player *player, Grid *gr){
 
     window->clear(sf::Color(190,220,255,255));
     
     
     //WARNING
+    /*
     for(int i(0); i<gr->getHeight(); i+=75){
         for(int j(0); j<gr->getWidth(); j+=75){
             if(gr->getAt(i,j) != nullptr){
@@ -147,9 +194,9 @@ void update(sf::RenderWindow *window, sf::RectangleShape *player, float *playerV
                 window->draw(*gr->getAt(i,j));
             }
         }
-    }
-    player->move(*playerVelocityX,*playerVelocityY);
-    window->draw(*player);
+    }*/
+    player->returnRect()->move(player->getVelX(),player->getVelY());
+    window->draw(*player->returnRect());
     window->display();
 }
 
