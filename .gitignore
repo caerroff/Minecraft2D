@@ -1,3 +1,6 @@
 
 GUI
 MC2D
+*.o
+MC2D
+*.gch
