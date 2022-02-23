@@ -3,6 +3,7 @@
 #include "GUI.hpp"
 #include "world.hpp"
 #include "player.hpp"
+#include "block.hpp"
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
 #define VERSION "0.0.6"
 
@@ -42,7 +43,7 @@ bool isOnGround(sf::RenderWindow *window, sf::RectangleShape *player);
  * @param playerVelocityY Y velocity of the player
  * @param gr the grid of blocks (beta)
  */
-void update(sf::RenderWindow *window, Player *player, Grid *gr);
+void update(sf::RenderWindow *window, Player *player, World *world);
 
 /**
  * @brief initialises the player
@@ -61,7 +62,8 @@ sf::RectangleShape * initPlayer(sf::RectangleShape *perso, sf::Texture *perso_te
  */
 void initDirt(sf::RectangleShape *dirt, sf::Texture *dirt_texture);
 
-
+void update_world(sf::RenderWindow *window,World *world);
+void update_player(sf::RenderWindow *window, Player *player);
 
 int main(){
     printf("Version %s\n", VERSION);
@@ -75,24 +77,51 @@ int main(){
     sf::Mouse::Button lClick(sf::Mouse::Button::Left);
     sf::Mouse::Button rClick(sf::Mouse::Button::Right);
     
-    std::vector<std::vector<int>> world;
-    world = superflatWorld();
-    int sizey = world.size();
-    int sizex = world[0].size();
+    std::vector<std::vector<int>> matrice;
+    matrice = superflatWorld();
+    int sizey = matrice.size();
+    int sizex = matrice[0].size();
+    /*
+        INIT WORLD
+    */
+    int sizeY = matrice.size();
+    int sizeX = matrice.at(0).size();
 
-    Grid grid(720,1280);
-    
-    for(int i(0); i<sizey; i+=75){
-        for(int j(0); j<sizex; j+=75){
-            if(world[i][j] == 1){
-                sf::RectangleShape dirt;
-                sf::Texture dirt_texture;
-                initDirt(&dirt, &dirt_texture);
-                window.draw(dirt);
-                grid.setAt(i,j,&dirt);
-            }  
+    World map;
+    /*
+    for(int i(0); i<sizeY; i+=75){
+        for(int j(0); j<sizeX; j+=75){
+            if(matrice.at(i).at(j) != 0){
+                sf::RectangleShape *dirt = (sf::RectangleShape *) malloc (sizeof(sf::RectangleShape));
+                sf::Texture *dirt_texture = (sf::Texture *) malloc (sizeof(sf::Texture));
+                dirt_texture->loadFromFile("sprite/block.png",sf::IntRect(0,0,64,64));
+                dirt->setTexture(dirt_texture);
+                dirt->setSize(sf::Vector2f(75,75));
+                dirt->setPosition(sf::Vector2f(j,i));
+                Block current_block(matrice.at(i).at(j),j,i, dirt, dirt_texture);
+
+                current_block.setPos(j,i);
+                map.append(&current_block);
+
+                free(dirt);
+                free(dirt_texture);
+            }
         }
+    }*/
+    for(int i(0); i<2; i++){
+        printf("%d\n", i);
+        sf::RectangleShape dirt;
+        sf::Texture dirt_texture;
+        dirt_texture.loadFromFile("sprite/block.png",sf::IntRect(0,0,64,64));
+        dirt.setTexture(&dirt_texture);
+        dirt.setSize(sf::Vector2f(75,75));
+        dirt.setPosition(sf::Vector2f(i*75,i*75));
+        Block current_block(1,i*75,i*75, &dirt, &dirt_texture);
+        map.append(&current_block);
+        printf("%d\n", i);
     }
+    
+    
     sf::Texture perso_texture;
     sf::RectangleShape perso;
     perso = *initPlayer(&perso, &perso_texture);
@@ -137,7 +166,7 @@ int main(){
         
 
         //printf("%.1f;%.1f\n",perso.getPosition().x,perso.getPosition().y);
-        update(&window, &player, &grid);
+        update(&window, &player, &map);
         gravity(&window, &player);
         //movement(&window, &perso, &playerVelocityX);
     }
@@ -180,23 +209,31 @@ bool isOnGround(sf::RenderWindow *window, sf::RectangleShape *player){
     }
 }
 
-void update(sf::RenderWindow *window, Player *player, Grid *gr){
-
-    window->clear(sf::Color(190,220,255,255));
-    
-    
-    //WARNING
-    /*
-    for(int i(0); i<gr->getHeight(); i+=75){
-        for(int j(0); j<gr->getWidth(); j+=75){
-            if(gr->getAt(i,j) != nullptr){
-                gr->getAt(i,j)->setPosition(j,i);
-                window->draw(*gr->getAt(i,j));
-            }
-        }
-    }*/
+void update_player(sf::RenderWindow *window, Player *player){
+    sf::Texture player_texture;
+    player_texture.loadFromFile("sprite/perso.png", sf::IntRect(0,0,32,32));
+    player->returnRect()->setTexture(&player_texture);
     player->returnRect()->move(player->getVelX(),player->getVelY());
     window->draw(*player->returnRect());
+}
+
+void update_world(sf::RenderWindow *window, World *world){
+    int nbBlocks = world->getNbBlock();
+    for(int i(0); i<nbBlocks; i++){
+        sf::Texture dirt_texture;
+        dirt_texture.loadFromFile("sprite/block.png", sf::IntRect(0,0,64,64));
+        world->getAt(i)->getBlock()->setTexture(&dirt_texture);
+        window->draw(*world->getAt(i)->getBlock());
+    }
+}
+void update(sf::RenderWindow *window, Player *player, World *world){
+
+    window->clear(sf::Color(190,220,255,255));
+    update_player(window, player);
+    update_world(window, world);
+    
+    
+    
     window->display();
 }
 

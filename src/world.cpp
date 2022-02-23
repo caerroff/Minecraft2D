@@ -1,4 +1,5 @@
 #include "world.hpp"
+#include "block.hpp"
 #include <vector>
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
 
@@ -6,34 +7,37 @@ using namespace std;
 
 
 
-    Grid::Grid(){
-        this->height = 0;
-        this->width = 0;
-    }
 
-    Grid::Grid(int pfHeight, int pfWidth){
-        for(int i(0); i<pfHeight; i++){
-            this->grid.push_back(vector<sf::RectangleShape *>(pfWidth));
-        }
-        this->height = pfHeight;
-        this->width = pfWidth;
-    };
 
-    int Grid::getHeight(){
-        return this->height;
-    }
 
-    int Grid::getWidth(){
-        return this->width;
-    }
+World::World(){
+    this->nb_block = 0;
+}
 
-    void Grid::setAt(int i, int j,sf::RectangleShape *obj){
-        this->grid.at(i).at(j) = obj;
-    }
 
-    sf::RectangleShape *Grid::getAt(int i, int j){
-        return this->grid.at(i).at(j);
-    }
+int World::getNbBlock(){
+    return this->nb_block;
+}
+
+void World::append(Block *pfBlock){
+    this->list.push_back(pfBlock);
+    this->nb_block += 1;
+}
+
+void World::pop(){
+    this->list.pop_back();
+    this->nb_block -= 1;
+}
+
+Block * World::getAt(int i){
+    return this->list.at(i);
+}
+
+
+void World::setAt(Block *block, int i){
+    this->list.at(i) = block;
+}
+
 
 
 vector<vector<int>> superflatWorld(){

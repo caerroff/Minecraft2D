@@ -1,26 +1,25 @@
 #ifndef WORLD
 #define WORLD
 #include <vector>
+#include "block.hpp"
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
 
-class Grid{
+
+
+class World{
     private:
-    std::vector<std::vector<sf::RectangleShape *>> grid;
-    int height;
-    int width;
+    int nb_block;
+    std::vector<Block *> list;
+
 
     public:
-    Grid();
-
-    Grid(int pfHeight, int pfWidth);
-
-    int getHeight();
-
-    int getWidth();
-
-    void setAt(int i, int j,sf::RectangleShape *obj);
-
-    sf::RectangleShape *getAt(int i, int j);
+    World();
+    int getNbBlock();
+    void append(Block *pfBlock);
+    void pop();
+    Block * getAt(int i);
+    void setAt(Block *block, int i);
+    
 };
 
 
