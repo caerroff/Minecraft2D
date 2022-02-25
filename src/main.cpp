@@ -25,71 +25,12 @@ int main(){
     sf::Mouse::Button lClick(sf::Mouse::Button::Left);
     sf::Mouse::Button rClick(sf::Mouse::Button::Right);
     
-<<<<<<< Updated upstream
     
     sf::RectangleShape dirt;
     sf::Texture dirt_texture;
     initDirt(&dirt, &dirt_texture);
     sf::RectangleShape perso;
     sf::Texture perso_texture;
-=======
-    std::vector<std::vector<int>> matrice;
-    matrice = superflatWorld();
-    int sizey = matrice.size();
-    int sizex = matrice[0].size();
-    /*
-        INIT WORLD
-    */
-    int sizeY = matrice.size();
-    int sizeX = matrice.at(0).size();
-
-    World map;
-    /*
-    for(int i(0); i<sizeY; i+=75){
-        for(int j(0); j<sizeX; j+=75){
-            if(matrice.at(i).at(j) != 0){
-                sf::RectangleShape *dirt = (sf::RectangleShape *) malloc (sizeof(sf::RectangleShape));
-                sf::Texture *dirt_texture = (sf::Texture *) malloc (sizeof(sf::Texture));
-                dirt_texture->loadFromFile("sprite/block.png",sf::IntRect(0,0,64,64));
-                dirt->setTexture(dirt_texture);
-                dirt->setSize(sf::Vector2f(75,75));
-                dirt->setPosition(sf::Vector2f(j,i));
-                Block current_block(matrice.at(i).at(j),j,i, dirt, dirt_texture);
-
-                current_block.setPos(j,i);
-                map.append(&current_block);
-
-                free(dirt);
-                free(dirt_texture);
-            }
-        }
-    }*/
-
-    //----WORLD----//
-        sf::RectangleShape dirt;
-        sf::Texture dirt_texture;
-        dirt_texture.loadFromFile("sprite/block.png",sf::IntRect(0,0,64,64));
-        dirt.setTexture(&dirt_texture);
-        dirt.setSize(sf::Vector2f(75,75));
-        dirt.setPosition(sf::Vector2f(100,100));
-        Block current_block(1,100,100, &dirt, &dirt_texture);
-        map.append(&current_block);
-
-        sf::RectangleShape dirt2;
-        sf::Texture dirt_texture2;
-        dirt_texture2.loadFromFile("sprite/block.png",sf::IntRect(0,0,64,64));
-        dirt2.setTexture(&dirt_texture2);
-        dirt2.setSize(sf::Vector2f(75,75));
-        dirt2.setPosition(sf::Vector2f(200,200));
-        Block truc(1,200,200, &dirt2, &dirt_texture2);
-        map.append(&truc);
-    
-
-    //----PLAYER----//
-    sf::RectangleShape perso; 
-    sf::Texture perso_texture;
-   
->>>>>>> Stashed changes
     perso = *initPlayer(&perso, &perso_texture);
 
     window.clear(sf::Color(190,220,255,255));
@@ -134,15 +75,9 @@ int main(){
 
         
 
-<<<<<<< Updated upstream
         
         update(&window,&perso,&playerVelocityX, &playerVelocityY, &dirt);
         gravity(&window, &perso, &playerVelocityY);
-=======
-        //printf("%.1f;%.1f\n",perso.getPosition().x,perso.getPosition().y);
-        update(&window, &player, &map);
- 
->>>>>>> Stashed changes
         //movement(&window, &perso, &playerVelocityX);
     }
 
@@ -184,42 +119,12 @@ bool isOnGround(sf::RenderWindow *window, sf::RectangleShape *player){
     }
 }
 
-<<<<<<< Updated upstream
 void update(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocityX, float *playerVelocityY,sf::RectangleShape *dirt){
     player->move(*playerVelocityX,*playerVelocityY);
     window->clear(sf::Color(190,220,255,255));
     window->draw(*player);
     window->draw(*dirt);
-=======
-void update_player(sf::RenderWindow *window, Player *player){
-    gravity(window, player);
-    sf::Texture player_texture;
-    player_texture.loadFromFile("sprite/perso.png", sf::IntRect(0,0,32,32));
-    player->returnRect()->setTexture(&player_texture);
-    player->returnRect()->move(player->getVelX(),player->getVelY());
-    window->draw(*player->returnRect());
-}
-
-void update_world(sf::RenderWindow *window, World *world){
-    int nbBlocks = world->getNbBlock();
-    for(int i(0); i<nbBlocks; i++){
-        sf::Texture dirt_texture;
-        //dirt_texture.loadFromFile("sprite/block.png", sf::IntRect(0,0,64,64));
-        //world->getAt(i)->getBlock()->setTexture(&dirt_texture);
-
-        world->getAt(i)->setPos(100 , 100);
-        window->draw(*world->getAt(i)->getBlock());
-    }
-}
-void update(sf::RenderWindow *window, Player *player, World *world){
-
-    window->clear(sf::Color(190,220,255,255));
-    update_world(window, world);
-    player->update_player(window);
-    
->>>>>>> Stashed changes
     window->display();
-    
 }
 
 sf::RectangleShape * initPlayer(sf::RectangleShape *perso, sf::Texture *perso_texture){
