@@ -4,3 +4,7 @@ MC2D
 *.o
 MC2D
 *.gch
+*.o
+*.o
+MC2D
+*.gch
