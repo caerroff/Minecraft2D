@@ -1,13 +1,16 @@
 #include <iostream>
 #include "GUI.hpp"
+#include "world.hpp"
+#include "player.hpp"
+#include "block.hpp"
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
-#define VERSION "0.0.6"
+#define VERSION "0.0.7"
 
 
 void loadTextures(sf::Texture *receiver, std::string path);
 void gravity(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocity);
 bool isOnGround(sf::RenderWindow *window, sf::RectangleShape *player);
-void update(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocityX, float *playerVelocityY,sf::RectangleShape *dirt);
+void update(sf::RenderWindow *window, Player *player, Block *dirt);
 sf::RectangleShape * initPlayer(sf::RectangleShape *perso, sf::Texture *perso_texture);
 void initDirt(sf::RectangleShape *dirt, sf::Texture *dirt_texture);
 
@@ -29,16 +32,19 @@ int main(){
     sf::RectangleShape dirt;
     sf::Texture dirt_texture;
     initDirt(&dirt, &dirt_texture);
+    Block dirt_block(1, dirt, dirt_texture);
+    
+    
     sf::RectangleShape perso;
     sf::Texture perso_texture;
     perso = *initPlayer(&perso, &perso_texture);
+    Player player(&perso_texture, &perso);
+
 
     window.clear(sf::Color(190,220,255,255));
     window.draw(perso);
     window.draw(dirt);
     window.display();
-    float playerVelocityX = 0.0;
-    float playerVelocityY = 0.0;
 
     /*
         LAUNCHING WINDOW
@@ -54,30 +60,29 @@ int main(){
             
             
             if(keyboard.isKeyPressed(sf::Keyboard::Right) && isOnGround(&window, &perso)){
-                    playerVelocityX = 10;
+                    player.setVelX(10);
             }
             if(keyboard.isKeyPressed(sf::Keyboard::Left) && isOnGround(&window, &perso)){
-                    playerVelocityX = -10;
+                    player.setVelX(-10);
             }
         }
 
         if(keyboard.isKeyPressed(sf::Keyboard::Space)){
             if(isOnGround(&window, &perso)){
-                playerVelocityY = -15;
+                player.setVelY(-10);
             }   
         }
         if(keyboard.isKeyPressed(sf::Keyboard::Escape)){
                 window.close();
         }
         if(keyboard.isKeyPressed(sf::Keyboard::Right) == false && keyboard.isKeyPressed(sf::Keyboard::Left) == false && !!isOnGround(&window, &perso)){
-            playerVelocityX = 0;
+            player.setVelX(0);
         }
 
         
 
         
-        update(&window,&perso,&playerVelocityX, &playerVelocityY, &dirt);
-        gravity(&window, &perso, &playerVelocityY);
+        update(&window, &player, &dirt_block);
         //movement(&window, &perso, &playerVelocityX);
     }
 
@@ -119,11 +124,11 @@ bool isOnGround(sf::RenderWindow *window, sf::RectangleShape *player){
     }
 }
 
-void update(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocityX, float *playerVelocityY,sf::RectangleShape *dirt){
-    player->move(*playerVelocityX,*playerVelocityY);
+void update(sf::RenderWindow *window, Player *player, Block *dirt){
+    player->move();
     window->clear(sf::Color(190,220,255,255));
-    window->draw(*player);
-    window->draw(*dirt);
+    player->update_player(window);
+    dirt->update_block(window);
     window->display();
 }
 

@@ -26,6 +26,8 @@ class Player{
         
         void gravity(sf::RenderWindow *window);
 
+        void move();
+
         void update_player(sf::RenderWindow *window);
 
         sf::RectangleShape *returnRect();

@@ -61,6 +61,9 @@ void Player::gravity(sf::RenderWindow *window){
     }
 }
 
+void Player::move(){
+    this->returnRect()->move(this->getVelX(), this->getVelY());
+}
 
 void Player::update_player(sf::RenderWindow *window){
     gravity(window);
