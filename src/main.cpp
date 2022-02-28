@@ -4,13 +4,11 @@
 #include "player.hpp"
 #include "block.hpp"
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
-#define VERSION "0.0.7"
+#define VERSION "0.0.8"
 
 
 void loadTextures(sf::Texture *receiver, std::string path);
-void gravity(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocity);
-bool isOnGround(sf::RenderWindow *window, sf::RectangleShape *player);
-void update(sf::RenderWindow *window, Player *player, Block *dirt);
+void update(sf::RenderWindow *window, Player *player, Block *dirt, World *world);
 sf::RectangleShape * initPlayer(sf::RectangleShape *perso, sf::Texture *perso_texture);
 void initDirt(sf::RectangleShape *dirt, sf::Texture *dirt_texture);
 
@@ -33,8 +31,31 @@ int main(){
     sf::Texture dirt_texture;
     initDirt(&dirt, &dirt_texture);
     Block dirt_block(1, dirt, dirt_texture);
+
+
+    World world(true);
+
+    for(int i(0); i<1280; i+=64){
+        /*
+            Le probleme vient d'ici.
+            Impossible de charger le block avec de la texture sinon le jeu ram a mort.
+            Je dois trouver une solution.
+        */
+
+        world.append(new Block(1, sf::RectangleShape(sf::Vector2f(64,64)), dirt_texture, i, 720-64));
+    }
     
     
+    //std::vector<std::vector<int>> grid = makeGrid(720, 1280);
+    /*for(int i(0); i<720; i+=75){
+        for(int j(0); j<1280; j+=75){
+            if(&grid[i][j] != nullptr){
+                if(grid[i][j] == 1){
+                    
+                }
+            }
+        }
+    }*/
     sf::RectangleShape perso;
     sf::Texture perso_texture;
     perso = *initPlayer(&perso, &perso_texture);
@@ -59,30 +80,30 @@ int main(){
         if(event.type == sf::Event::KeyPressed){
             
             
-            if(keyboard.isKeyPressed(sf::Keyboard::Right) && isOnGround(&window, &perso)){
+            if(keyboard.isKeyPressed(sf::Keyboard::Right) && player.isOnGround(&window)){
                     player.setVelX(10);
             }
-            if(keyboard.isKeyPressed(sf::Keyboard::Left) && isOnGround(&window, &perso)){
+            if(keyboard.isKeyPressed(sf::Keyboard::Left) && player.isOnGround(&window)){
                     player.setVelX(-10);
             }
         }
 
         if(keyboard.isKeyPressed(sf::Keyboard::Space)){
-            if(isOnGround(&window, &perso)){
+            if(player.isOnGround(&window)){
                 player.setVelY(-10);
             }   
         }
         if(keyboard.isKeyPressed(sf::Keyboard::Escape)){
                 window.close();
         }
-        if(keyboard.isKeyPressed(sf::Keyboard::Right) == false && keyboard.isKeyPressed(sf::Keyboard::Left) == false && !!isOnGround(&window, &perso)){
+        if(keyboard.isKeyPressed(sf::Keyboard::Right) == false && keyboard.isKeyPressed(sf::Keyboard::Left) == false && player.isOnGround(&window)){
             player.setVelX(0);
         }
 
         
 
-        
-        update(&window, &player, &dirt_block);
+
+        update(&window, &player, &dirt_block, &world);
         //movement(&window, &perso, &playerVelocityX);
     }
 
@@ -94,41 +115,13 @@ void loadTextures(sf::Texture *receiver, std::string path){
     receiver->loadFromFile(path,sf::IntRect(0,0,32,32));
 }
 
-void movement(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocityX){
-    
-}
 
-void gravity(sf::RenderWindow *window, sf::RectangleShape *player, float *playerVelocity){
-    if(isOnGround(window,player) == false && *playerVelocity*1.25 < 25){
-        if(*playerVelocity == 0){
-            *playerVelocity = 1.0;
-        }else if(*playerVelocity >0){
-            *playerVelocity = *playerVelocity * 1.25;
-        }else if(*playerVelocity < -1.5){
-            *playerVelocity = *playerVelocity * 0.865;
-        }else{
-            *playerVelocity = 0;
-        }
-    }else if(isOnGround(window,player) == true && playerVelocity > 0){
-        *playerVelocity = 0;
-        player->setPosition(player->getPosition().x,window->getSize().y -player->getSize().y );
-    }
-}
-
-
-bool isOnGround(sf::RenderWindow *window, sf::RectangleShape *player){
-    if(player->getPosition().y+player->getSize().y < window->getSize().y){
-        return false;
-    }else{
-        return true;
-    }
-}
-
-void update(sf::RenderWindow *window, Player *player, Block *dirt){
+void update(sf::RenderWindow *window, Player *player, Block *dirt, World *world){
     player->move();
     window->clear(sf::Color(190,220,255,255));
     player->update_player(window);
     dirt->update_block(window);
+    world->draw(window);
     window->display();
 }
 

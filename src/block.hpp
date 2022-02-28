@@ -10,6 +10,8 @@ class Block{
 
     public:
         Block(int pfId, sf::RectangleShape pfRectangle, sf::Texture pfTexture);
+        Block(int pfId, sf::RectangleShape pfRectangle, sf::Texture pfTexture, int x, int y);
+        Block(int pfId, sf::RectangleShape pfRectangle, int x, int y);
         int getId();
         sf::RectangleShape *getRectangle();
         sf::Texture *getTexture();

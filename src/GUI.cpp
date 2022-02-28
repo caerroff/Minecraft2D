@@ -1,7 +1,7 @@
 #include "GUI.hpp"
 #include <iostream>
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
-#define VERSION "0.0.7"
+#define VERSION "0.0.8"
 
 void mainMenu(sf::RenderWindow *window){
 
@@ -39,6 +39,8 @@ void mainMenu(sf::RenderWindow *window){
     play.setOutlineThickness(3);
     window->draw(play);
 
+    
+
     sf::Text play_text(sf::String("Play"),regular,70U);
     play_text.setOutlineColor(sf::Color(50,50,50,255));
     play_text.setFillColor(sf::Color(180,255,180,255));
@@ -54,6 +56,15 @@ void mainMenu(sf::RenderWindow *window){
     options.setOutlineColor(sf::Color::Black);
     options.setOutlineThickness(3);
     window->draw(options);
+
+    sf::Text options_text(sf::String("Options"),regular,70U);
+    options_text.setOutlineColor(sf::Color(50,50,50,255));
+    options_text.setFillColor(sf::Color(180,255,180,255));
+    options_text.setOutlineThickness(5);
+    options_text.setPosition(window->getSize().x/2-130,395);
+    options_text.setLetterSpacing(1.5);
+    window->draw(options_text);
+
 
     sf::RectangleShape version;
     version.setSize(sf::Vector2f(150,30));

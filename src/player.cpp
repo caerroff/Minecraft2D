@@ -37,7 +37,7 @@ void Player::setVel(float valueX, float valueY){
 
 
 bool Player::isOnGround(sf::RenderWindow *window){
-    if(this->returnRect()->getPosition().y+this->returnRect()->getSize().y < window->getSize().y){
+    if(this->returnRect()->getPosition().y+this->returnRect()->getSize().y < window->getSize().y-64){
         return false;
     }else{
         return true;
@@ -57,7 +57,7 @@ void Player::gravity(sf::RenderWindow *window){
         }
     }else if(this->isOnGround(window) == true && this->getVelY() > 0){
         this->setVelY(0);
-        this->returnRect()->setPosition(this->returnRect()->getPosition().x,window->getSize().y -this->returnRect()->getSize().y );
+        this->returnRect()->setPosition(this->returnRect()->getPosition().x,window->getSize().y-64 -this->returnRect()->getSize().y );
     }
 }
 

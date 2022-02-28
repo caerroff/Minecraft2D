@@ -8,6 +8,21 @@ Block::Block(int pfId, sf::RectangleShape pfRectangle, sf::Texture pfTexture){
     this->texture = pfTexture;
 }
 
+Block::Block(int pfId, sf::RectangleShape pfRectangle, sf::Texture pfTexture, int x, int y){
+    this->id = pfId;
+    this->rectangle = pfRectangle;
+    this->texture = pfTexture;
+    this->rectangle.setPosition(x, y);
+    this->rectangle.setTexture(&this->texture);
+}
+
+Block::Block(int pfId, sf::RectangleShape pfRectangle, int x, int y){
+    this->id = pfId;
+    this->rectangle = pfRectangle;
+    this->rectangle.setFillColor(sf::Color::Black);
+    this->rectangle.setPosition(x, y);
+}
+
 int Block::getId(){
     return this->id;
 }
