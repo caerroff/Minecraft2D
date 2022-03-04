@@ -4,7 +4,7 @@
 #include "player.hpp"
 #include "block.hpp"
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
-#define VERSION "0.0.8"
+#define VERSION "0.0.9"
 
 
 void loadTextures(sf::Texture *receiver, std::string path);
@@ -34,28 +34,12 @@ int main(){
 
 
     World world(true);
-
     for(int i(0); i<1280; i+=64){
-        /*
-            Le probleme vient d'ici.
-            Impossible de charger le block avec de la texture sinon le jeu ram a mort.
-            Je dois trouver une solution.
-        */
-
-        world.append(new Block(1, sf::RectangleShape(sf::Vector2f(64,64)), dirt_texture, i, 720-64));
+        world.append(new Block(1, sf::RectangleShape(sf::Vector2f(64,64)), dirt_texture, i, 720-128));
     }
-    
-    
-    //std::vector<std::vector<int>> grid = makeGrid(720, 1280);
-    /*for(int i(0); i<720; i+=75){
-        for(int j(0); j<1280; j+=75){
-            if(&grid[i][j] != nullptr){
-                if(grid[i][j] == 1){
-                    
-                }
-            }
-        }
-    }*/
+    world.append(new Block(1, sf::RectangleShape(sf::Vector2f(64,64)), dirt_texture, 128, 720-(128+64)));
+    world.append(new Block(1, sf::RectangleShape(sf::Vector2f(64,64)), dirt_texture, 256+64, 720-(256)));
+    //world.append(new Block(1, sf::RectangleShape(sf::Vector2f(64,64)), dirt_texture, 512, 256));
     sf::RectangleShape perso;
     sf::Texture perso_texture;
     perso = *initPlayer(&perso, &perso_texture);
@@ -78,19 +62,21 @@ int main(){
             }
         }
         if(event.type == sf::Event::KeyPressed){
-            
-            
             if(keyboard.isKeyPressed(sf::Keyboard::Right) && player.isOnGround(&window)){
                     player.setVelX(10);
+            }else if(keyboard.isKeyPressed(sf::Keyboard::Right)){
+                player.setVelX(5);
             }
             if(keyboard.isKeyPressed(sf::Keyboard::Left) && player.isOnGround(&window)){
                     player.setVelX(-10);
+            }else if(keyboard.isKeyPressed(sf::Keyboard::Left)){
+                player.setVelX(-5);
             }
         }
 
         if(keyboard.isKeyPressed(sf::Keyboard::Space)){
             if(player.isOnGround(&window)){
-                player.setVelY(-10);
+                player.setVelY(-15);
             }   
         }
         if(keyboard.isKeyPressed(sf::Keyboard::Escape)){
@@ -117,10 +103,8 @@ void loadTextures(sf::Texture *receiver, std::string path){
 
 
 void update(sf::RenderWindow *window, Player *player, Block *dirt, World *world){
-    player->move();
     window->clear(sf::Color(190,220,255,255));
-    player->update_player(window);
-    dirt->update_block(window);
+    player->update_player(window, world);
     world->draw(window);
     window->display();
 }
@@ -128,7 +112,7 @@ void update(sf::RenderWindow *window, Player *player, Block *dirt, World *world)
 sf::RectangleShape * initPlayer(sf::RectangleShape *perso, sf::Texture *perso_texture){
     loadTextures(perso_texture, "sprite/perso.png");
     perso->setTexture(perso_texture);
-    perso->setSize(sf::Vector2f(140.f,140.f));
+    perso->setSize(sf::Vector2f(64.f,128.f));
     return perso;
 
 }

@@ -1,6 +1,7 @@
 #ifndef PLAYER
 #define PLAYER
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
+#include "world.hpp"
 
 class Player{
     private:
@@ -8,6 +9,8 @@ class Player{
         sf::RectangleShape *body;
         float velocityX;
         float velocityY;
+        bool onGround;
+        bool canMove;
 
     public:
         Player(sf::Texture *text, sf::RectangleShape *bdy);
@@ -26,9 +29,10 @@ class Player{
         
         void gravity(sf::RenderWindow *window);
 
-        void move();
+        void move(World *world);
 
-        void update_player(sf::RenderWindow *window);
+        void update_player(sf::RenderWindow *window, World *world);
+
 
         sf::RectangleShape *returnRect();
 };

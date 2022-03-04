@@ -1,9 +1,9 @@
 #include "GUI.hpp"
 #include <iostream>
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
-#define VERSION "0.0.8"
+#define VERSION "0.0.9"
 
-void mainMenu(sf::RenderWindow *window){
+int mainMenu(sf::RenderWindow *window){
 
     sf::Font fancy;
     sf::Font regular;
@@ -11,7 +11,7 @@ void mainMenu(sf::RenderWindow *window){
     regular.loadFromFile("lib/fonts/Ubuntu-Regular.ttf");
 
     window->setVerticalSyncEnabled(true);
-    window->setFramerateLimit(60);
+    window->setFramerateLimit(120);
     sf::Color cyan(sf::Color::Cyan);
     window->clear(sf::Color(250,239,255));
     
@@ -109,4 +109,5 @@ void mainMenu(sf::RenderWindow *window){
         }
 
     }
+    return 0;
 }
