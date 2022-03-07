@@ -61,3 +61,18 @@ std::vector<std::vector<int>> makeGrid(int height, int width){
     }
     return grid;
 }
+
+int World::isIn(int x, int y){
+    int indice = -1;
+    for(int i(0); i<this->nbBlocks && indice == -1; i++){
+        if(this->getAt(i).getRectangle()->getPosition().x == x && this->getAt(i).getRectangle()->getPosition().y == y){
+            indice = i;
+        }
+    }
+    return indice;
+}
+
+void World::deleteAt(int index){
+    this->blocks.erase(this->blocks.begin() + index);
+    this->nbBlocks -= 1;
+}

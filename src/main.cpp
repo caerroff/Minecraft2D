@@ -1,14 +1,15 @@
 #include <iostream>
+#include <math.h>
 #include "GUI.hpp"
 #include "world.hpp"
 #include "player.hpp"
 #include "block.hpp"
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
-#define VERSION "0.0.9"
+#define VERSION "0.1.1"
 
 
 void loadTextures(sf::Texture *receiver, std::string path);
-void update(sf::RenderWindow *window, Player *player, Block *dirt, World *world);
+void update(sf::RenderWindow *window, Player *player, Block *dirt, World *world, sf::RectangleShape *mouseRectangle);
 sf::RectangleShape * initPlayer(sf::RectangleShape *perso, sf::Texture *perso_texture);
 void initDirt(sf::RectangleShape *dirt, sf::Texture *dirt_texture);
 
@@ -32,13 +33,18 @@ int main(){
     initDirt(&dirt, &dirt_texture);
     Block dirt_block(1, dirt, dirt_texture);
 
+    sf::RectangleShape mouseRectangle;
+    mouseRectangle.setSize(sf::Vector2f(64,64));
+    mouseRectangle.setFillColor(sf::Color::Transparent);
+    mouseRectangle.setOutlineColor(sf::Color::Black);
+    mouseRectangle.setOutlineThickness(1);
 
     World world(true);
     for(int i(0); i<1280; i+=64){
-        world.append(new Block(1, sf::RectangleShape(sf::Vector2f(64,64)), dirt_texture, i, 720-128));
+        world.append(new Block(1, sf::RectangleShape(sf::Vector2f(64,64)), dirt_texture, i, 576));
     }
-    world.append(new Block(1, sf::RectangleShape(sf::Vector2f(64,64)), dirt_texture, 128, 720-(128+64)));
-    world.append(new Block(1, sf::RectangleShape(sf::Vector2f(64,64)), dirt_texture, 256+64, 720-(256)));
+    world.append(new Block(1, sf::RectangleShape(sf::Vector2f(64,64)), dirt_texture, 128, 512));
+    //world.append(new Block(1, sf::RectangleShape(sf::Vector2f(64,64)), dirt_texture, 256+64, 128));
     //world.append(new Block(1, sf::RectangleShape(sf::Vector2f(64,64)), dirt_texture, 512, 256));
     sf::RectangleShape perso;
     sf::Texture perso_texture;
@@ -50,7 +56,7 @@ int main(){
     window.draw(perso);
     window.draw(dirt);
     window.display();
-
+    bool stopUpdating = false;
     /*
         LAUNCHING WINDOW
     */
@@ -87,9 +93,24 @@ int main(){
         }
 
         
-
-
-        update(&window, &player, &dirt_block, &world);
+        mouseRectangle.setPosition(sf::Vector2f((((int) mouse.getPosition(window).x/64)) *64, ((int) (mouse.getPosition(window).y/64))*64 ));
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)){
+            if(!stopUpdating){
+                int posX = ((int) mouse.getPosition(window).x/64)*64;
+                int posY = ((int) (mouse.getPosition(window).y/64))*64;\
+                int index = world.isIn(posX, posY);
+                if(index != -1){
+                    world.deleteAt(index);
+                }else{
+                    world.append(new Block(1, sf::RectangleShape(sf::Vector2f(64,64)), dirt_texture, posX, posY));
+                }
+            }
+            
+            stopUpdating=true;
+        }else if(!sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)){
+            stopUpdating = false;
+        }
+        update(&window, &player, &dirt_block, &world, &mouseRectangle);
         //movement(&window, &perso, &playerVelocityX);
     }
 
@@ -98,21 +119,23 @@ int main(){
 
 
 void loadTextures(sf::Texture *receiver, std::string path){
-    receiver->loadFromFile(path,sf::IntRect(0,0,32,32));
+    receiver->loadFromFile(path,sf::IntRect(0,0,50,100));
 }
 
 
-void update(sf::RenderWindow *window, Player *player, Block *dirt, World *world){
+void update(sf::RenderWindow *window, Player *player, Block *dirt, World *world, sf::RectangleShape *mouseRectangle){
     window->clear(sf::Color(190,220,255,255));
     player->update_player(window, world);
     world->draw(window);
+    window->draw(*mouseRectangle);
     window->display();
 }
 
 sf::RectangleShape * initPlayer(sf::RectangleShape *perso, sf::Texture *perso_texture){
     loadTextures(perso_texture, "sprite/perso.png");
+    perso_texture->setSmooth(true);
     perso->setTexture(perso_texture);
-    perso->setSize(sf::Vector2f(64.f,128.f));
+    perso->setSize(sf::Vector2f(50.f,100.f));
     return perso;
 
 }

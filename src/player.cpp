@@ -60,28 +60,33 @@ void Player::gravity(sf::RenderWindow *window){
 }
 
 void Player::move(World *world){
+    int closestBlockXLeft;
+    int closestBlockXRight;
     int nbBlocks = world->getNbBlocks();
     for(int i(0); i<nbBlocks; i++){
         
-        if((world->getAt(i).getRectangle()->getPosition().y + 64 <= this->body->getPosition().y + this->body->getSize().y) && world->getAt(i).getRectangle()->getPosition().y > this->body->getPosition().y){
+        if((world->getAt(i).getRectangle()->getPosition().y + 64 <= this->body->getPosition().y + this->body->getSize().y && world->getAt(i).getRectangle()->getPosition().y <= this->body->getPosition().y + this->body->getSize().y )|| (world->getAt(i).getRectangle()->getPosition().y < this->body->getPosition().y && !(this->body->getPosition().y > (world->getAt(i).getRectangle()->getPosition().y + world->getAt(i).getRectangle()->getSize().y)))){
+            
+            //LEFT COLLISION
             if(world->getAt(i).getRectangle()->getPosition().x > this->body->getPosition().x + this->body->getSize().x){
+                closestBlockXLeft = world->getAt(i).getRectangle()->getPosition().x;
                 
-                if(world->getAt(i).getRectangle()->getPosition().x - (this->body->getPosition().x + this->body->getSize().x) < this->velocityX){
+                if(world->getAt(i).getRectangle()->getPosition().x - (this->body->getPosition().x + this->body->getSize().x + this->velocityX) <= 0 ){
                     this->canMove = false;
-                    printf("1\n");
+                    
                 }else{
                     this->canMove = true;
-                    printf("2\n");
+                    
                 }
 
+            //RIGHT COLLISION
             }else if(world->getAt(i).getRectangle()->getPosition().x + world->getAt(i).getRectangle()->getSize().x < this->body->getPosition().x){
-                printf("%f\n", this->body->getPosition().x - (world->getAt(i).getRectangle()->getPosition().x + world->getAt(i).getRectangle()->getSize().x));
                 if(this->body->getPosition().x - (world->getAt(i).getRectangle()->getPosition().x + world->getAt(i).getRectangle()->getSize().x) < -this->velocityX){
                     this->canMove = false;
-                    printf("3\n");
+                    
                 }else{
                     this->canMove = true;
-                    printf("4\n");
+                    
                 }
             }
             
@@ -90,9 +95,10 @@ void Player::move(World *world){
 
         if( this->body->getPosition().x <= world->getAt(i).getRectangle()->getPosition().x + world->getAt(i).getRectangle()->getSize().x &&  this->body->getPosition().x >= world->getAt(i).getRectangle()->getPosition().x){
                 if(world->getAt(i).getRectangle()->getPosition().y <= this->body->getPosition().y + this->body->getSize().y){
-                
+                    
                     if(this->body->getPosition().y + this->body->getSize().y > world->getAt(i).getRectangle()->getPosition().y ){
                         this->body->setPosition(this->body->getPosition().x, world->getAt(i).getRectangle()->getPosition().y-this->body->getSize().y);
+                        
                     }
                     
                     this->onGround = true;
@@ -103,9 +109,11 @@ void Player::move(World *world){
             
         }else if(this->body->getPosition().x+this->body->getSize().x <= world->getAt(i).getRectangle()->getPosition().x + world->getAt(i).getRectangle()->getSize().x &&  this->body->getPosition().x+this->body->getSize().x >= world->getAt(i).getRectangle()->getPosition().x){
                 if(world->getAt(i).getRectangle()->getPosition().y <= this->body->getPosition().y + this->body->getSize().y){
-                
-                    if(this->body->getPosition().y + this->body->getSize().y > world->getAt(i).getRectangle()->getPosition().y ){
+                    
+                    
+                    if(this->body->getPosition().y + this->body->getSize().y > world->getAt(i).getRectangle()->getPosition().y && this->body->getPosition().y < world->getAt(i).getRectangle()->getPosition().y){
                         this->body->setPosition(this->body->getPosition().x, world->getAt(i).getRectangle()->getPosition().y-this->body->getSize().y);
+                        
                     }
                     
                     this->onGround = true;
@@ -135,13 +143,12 @@ void Player::move(World *world){
             this->returnRect()->move(0, 0);
         }
     }
-    printf("Can move : %d\n", this->canMove);
 }
 
 void Player::update_player(sf::RenderWindow *window, World *world){
     gravity(window);
     sf::Texture player_texture;
-    player_texture.loadFromFile("sprite/perso.png", sf::IntRect(0,0,32,32));
+    player_texture.loadFromFile("sprite/perso.png", sf::IntRect(0,0,50,100));
     this->returnRect()->setTexture(&player_texture);
     this->move(world);
     

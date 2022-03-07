@@ -1,7 +1,7 @@
 #include "GUI.hpp"
 #include <iostream>
 #include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
-#define VERSION "0.0.9"
+#define VERSION "0.1.1"
 
 int mainMenu(sf::RenderWindow *window){
 
@@ -11,7 +11,7 @@ int mainMenu(sf::RenderWindow *window){
     regular.loadFromFile("lib/fonts/Ubuntu-Regular.ttf");
 
     window->setVerticalSyncEnabled(true);
-    window->setFramerateLimit(120);
+    window->setFramerateLimit(60);
     sf::Color cyan(sf::Color::Cyan);
     window->clear(sf::Color(250,239,255));
     

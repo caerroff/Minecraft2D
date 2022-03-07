@@ -17,7 +17,8 @@ class World{
     void append(Block * block);
     void pop();
     void draw(sf::RenderWindow *window);
-
+    int isIn(int x, int y);
+    void deleteAt(int index);
 };
 
 std::vector<std::vector<int>> makeGrid(int height, int width);
