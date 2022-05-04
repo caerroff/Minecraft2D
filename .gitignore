@@ -3,3 +3,4 @@ GUI
 MC2D
 *.o
 *.gch
+bin/*

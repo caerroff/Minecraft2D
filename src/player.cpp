@@ -59,6 +59,21 @@ void Player::gravity(sf::RenderWindow *window){
 
 }
 
+
+//-----------------------------
+/*
+[VERSION 0.1.1]
+--Collision issues:
+
+-If there is a block above another, the collision is calculated for the block above, no matter how far it is
+
+-If there is a block behind another, the collision is also fucked up.
+
+-> I have to find a way to find the closest block, and to calculate only its collision.
+*/
+//-----------------------------
+
+
 void Player::move(World *world){
     int closestBlockXLeft;
     int closestBlockXRight;
