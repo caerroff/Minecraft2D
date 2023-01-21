@@ -1,5 +1,5 @@
 #include "block.hpp"
-#include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
 
 
 Block::Block(int pfId, sf::RectangleShape pfRectangle, sf::Texture pfTexture){

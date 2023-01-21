@@ -1,6 +1,5 @@
 #include <iostream>
-#include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
-#include "../lib/SFML-2.5.1/include/SFML/System.hpp"
+#include <SFML/Graphics.hpp>
 
 int main(void){
 

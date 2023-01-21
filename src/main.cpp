@@ -4,7 +4,7 @@
 #include "world.hpp"
 #include "player.hpp"
 #include "block.hpp"
-#include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
 #define VERSION "0.1.1"
 
 
@@ -27,7 +27,11 @@ int main(){
     sf::Mouse::Button lClick(sf::Mouse::Button::Left);
     sf::Mouse::Button rClick(sf::Mouse::Button::Right);
     
-    
+    sf::View view;
+    view.setCenter(0,0);
+    view.setSize(1280, 720);
+    window.setView(view);
+
     sf::RectangleShape dirt;
     sf::Texture dirt_texture;
     initDirt(&dirt, &dirt_texture);
@@ -56,6 +60,7 @@ int main(){
     window.draw(perso);
     window.draw(dirt);
     window.display();
+    window.setView(view);
     bool stopUpdating = false;
     /*
         LAUNCHING WINDOW
@@ -111,6 +116,8 @@ int main(){
             stopUpdating = false;
         }
         update(&window, &player, &dirt_block, &world, &mouseRectangle);
+        view.setCenter(player.returnRect()->getPosition());
+        window.setView(view);
         //movement(&window, &perso, &playerVelocityX);
     }
 

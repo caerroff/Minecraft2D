@@ -2,7 +2,7 @@
 #include "world.hpp"
 #include <vector>
 #include "block.hpp"
-#include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
 
 
 World::World(bool test){

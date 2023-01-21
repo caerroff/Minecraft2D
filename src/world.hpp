@@ -2,7 +2,7 @@
 #define WORLD
 #include <vector>
 #include "block.hpp"
-#include "../lib/SFML-2.5.1/include/SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
 
 class World{
     private:
