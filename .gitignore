@@ -4,3 +4,5 @@ MC2D
 *.gch
 bin/*.o
 .zip
+.vscode/*
+MC2D
