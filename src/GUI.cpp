@@ -3,9 +3,12 @@
 #include <SFML/Graphics.hpp>
 #define VERSION "0.1.1"
 
+
+
 int mainMenu(sf::RenderWindow *window)
 {
 
+    std::cout << "Build Number : " << BUILDNUMBER << std::endl;
     sf::Font fancy;
     sf::Font regular;
     fancy.loadFromFile("lib/fonts/Shizuru-Regular.ttf");
@@ -76,6 +79,21 @@ int mainMenu(sf::RenderWindow *window)
     version_text.setPosition(10, 690);
     version_text.setLetterSpacing(1.5);
     window->draw(version_text);
+
+    sf::RectangleShape build;
+    build.setSize(sf::Vector2f(200, 30));
+    build.setPosition(sf::Vector2f(window->getSize().x-build.getSize().x, window->getSize().y - build.getSize().y));
+    build.setFillColor(sf::Color::Black);
+    window->draw(build);
+
+    sf::Text build_text(sf::String("Build ") + sf::String(BUILDNUMBER), regular, 20U);
+    build_text.setLetterSpacing(1.4);
+    build_text.setFillColor(sf::Color::White);
+    build_text.setOutlineColor(sf::Color::Black);
+    build_text.setOutlineThickness(1);
+    build_text.setPosition(sf::Vector2f(window->getSize().x -190, window->getSize().y - 30));
+    window->draw(build_text); 
+
 
     sf::Mouse mouse;
     sf::Cursor cursor;
