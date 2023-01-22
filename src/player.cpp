@@ -80,7 +80,7 @@ void Player::move(World *world){
     int nbBlocks = world->getNbBlocks();
     for(int i(0); i<nbBlocks; i++){
         
-        if((world->getAt(i).getRectangle()->getPosition().y + 64 <= this->body->getPosition().y + this->body->getSize().y && world->getAt(i).getRectangle()->getPosition().y <= this->body->getPosition().y + this->body->getSize().y )|| (world->getAt(i).getRectangle()->getPosition().y < this->body->getPosition().y && !(this->body->getPosition().y > (world->getAt(i).getRectangle()->getPosition().y + world->getAt(i).getRectangle()->getSize().y)))){
+        if((world->getAt(i).getRectangle()->getPosition().y + 64 >= this->body->getPosition().y + this->body->getSize().y && world->getAt(i).getRectangle()->getPosition().y <= this->body->getPosition().y + this->body->getSize().y )|| (world->getAt(i).getRectangle()->getPosition().y < this->body->getPosition().y && !(this->body->getPosition().y > (world->getAt(i).getRectangle()->getPosition().y + world->getAt(i).getRectangle()->getSize().y)))){
             
             //LEFT COLLISION
             if(world->getAt(i).getRectangle()->getPosition().x > this->body->getPosition().x + this->body->getSize().x){
