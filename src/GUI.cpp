@@ -4,7 +4,6 @@
 #define VERSION "0.1.1"
 
 
-
 int mainMenu(sf::RenderWindow *window)
 {
 
