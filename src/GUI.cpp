@@ -1,7 +1,11 @@
 #include "GUI.hpp"
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFML/Main.hpp>
 #define VERSION "0.1.1"
+#ifndef BUILDNUMBER
+#define BUILDNUMBER "0"
+#endif
 
 
 int mainMenu(sf::RenderWindow *window)
